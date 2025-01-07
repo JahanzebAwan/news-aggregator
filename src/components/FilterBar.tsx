@@ -33,10 +33,14 @@ const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters }) => {
 
   return (
     <div style={{ display: "flex", gap: "16px", margin: "16px" }}>
-      {/* Category Filter */}
       <FormControl fullWidth>
-        <InputLabel>Category</InputLabel>
-        <Select value={filters.category} onChange={onCategoryChange}>
+        <InputLabel id="category-label">Category</InputLabel>
+        <Select
+          value={filters.category}
+          onChange={onCategoryChange}
+          label="Category"
+          id="category-label"
+        >
           <MenuItem value="all">All</MenuItem>
           <MenuItem value="technology">Technology</MenuItem>
           <MenuItem value="sports">Sports</MenuItem>
@@ -44,10 +48,14 @@ const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters }) => {
         </Select>
       </FormControl>
 
-      {/* Source Filter */}
       <FormControl fullWidth>
-        <InputLabel>Source</InputLabel>
-        <Select value={filters.source} onChange={onSourceChange}>
+        <InputLabel id="source-label">Source</InputLabel>
+        <Select
+          value={filters.source}
+          onChange={onSourceChange}
+          label="Source"
+          id="source-label"
+        >
           <MenuItem value="all">All</MenuItem>
           <MenuItem value="NewsApi">NewsApi</MenuItem>
           <MenuItem value="NewYorkTimes">New York Times</MenuItem>
