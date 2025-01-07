@@ -1,12 +1,11 @@
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  TextField,
-  InputAdornment,
-} from "@mui/material";
+import { AppBar, Toolbar, Typography, TextField } from "@mui/material";
 
-const Header = ({ searchQuery, setSearchQuery }) => {
+interface HeaderProps {
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+}
+
+const Header = ({ searchQuery, setSearchQuery }: HeaderProps) => {
   return (
     <AppBar position="static" style={{ marginBottom: "16px" }}>
       <Toolbar>

@@ -8,8 +8,8 @@ export const fetchArticles = async (searchQuery, filters) => {
   const response = await axios.get("https://newsapi.org/v2/top-headlines", {
     params: {
       q: searchQuery || "latest",
-      category: category || undefined,
-      sources: source || undefined,
+      category: category === "all" ? undefined : category || undefined,
+      // sources: source || undefined,
       apiKey: NEWSAPI_API_KEY,
     },
   });
