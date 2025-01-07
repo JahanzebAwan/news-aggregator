@@ -17,7 +17,15 @@ const NewsFeed = ({ searchQuery, filters }) => {
   if (isError) return <p>Error fetching articles.</p>;
 
   return (
-    <div style={{ padding: "16px", display: "grid", gap: "16px" }}>
+    <div
+      style={{
+        padding: "16px",
+        display: "grid",
+        gap: "16px",
+        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+        justifyContent: "center",
+      }}
+    >
       {articles.map((article, index) => (
         <NewsCard key={index} article={article} />
       ))}

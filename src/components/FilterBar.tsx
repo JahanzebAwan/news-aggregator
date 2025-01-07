@@ -7,7 +7,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 
-export type SourceType = "NewsApi" | "OpenNews" | "NewsCred" | "all";
+export type SourceType = "NewsApi" | "NewYorkTimes" | "all";
 
 export interface Filters {
   category: string;
@@ -48,10 +48,9 @@ const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters }) => {
       <FormControl fullWidth>
         <InputLabel>Source</InputLabel>
         <Select value={filters.source} onChange={onSourceChange}>
-          <MenuItem value="">All</MenuItem>
+          <MenuItem value="all">All</MenuItem>
           <MenuItem value="NewsApi">NewsApi</MenuItem>
-          <MenuItem value="OpenNews">OpenNews</MenuItem>
-          <MenuItem value="NewsCred">NewsCred</MenuItem>
+          <MenuItem value="NewYorkTimes">New York Times</MenuItem>
         </Select>
       </FormControl>
     </div>
