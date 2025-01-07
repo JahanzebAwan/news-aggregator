@@ -1,4 +1,3 @@
-import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchArticles } from "../services/apiService";
 import NewsCard from "./NewsCard";

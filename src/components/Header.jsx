@@ -19,13 +19,6 @@ const Header = ({ searchQuery, setSearchQuery }) => {
           placeholder="Search articles..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                {/* <SearchIcon /> */}
-              </InputAdornment>
-            ),
-          }}
           style={{ backgroundColor: "white", borderRadius: "4px" }}
         />
       </Toolbar>
