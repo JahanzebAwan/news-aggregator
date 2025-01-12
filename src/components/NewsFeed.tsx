@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchArticles } from "../services/apiService";
 import NewsCard from "./NewsCard";
+import { fetchArticles } from "../services/apiService";
 
 const NewsFeed = ({ searchQuery, filters }) => {
   const {
