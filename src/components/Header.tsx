@@ -1,4 +1,14 @@
-import { AppBar, Toolbar, Typography, TextField } from "@mui/material";
+import React from "react";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  useMediaQuery,
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 interface HeaderProps {
   searchQuery: string;
@@ -6,20 +16,59 @@ interface HeaderProps {
 }
 
 const Header = ({ searchQuery, setSearchQuery }: HeaderProps) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [query, setQuery] = React.useState("");
+
+  const onSearch = () => {
+    setSearchQuery(query);
+  };
+
   return (
     <AppBar position="static" style={{ marginBottom: "16px" }}>
-      <Toolbar>
-        <Typography variant="h6" style={{ flexGrow: 1 }}>
+      <Toolbar
+        style={{ flexDirection: isMobile ? "column" : "row", gap: "8px" }}
+      >
+        <Typography
+          variant="h6"
+          style={{
+            flexGrow: isMobile ? 0 : 1,
+            marginBottom: isMobile ? "8px" : "0",
+          }}
+        >
           News Aggregator
         </Typography>
-        <TextField
-          variant="outlined"
-          size="small"
-          placeholder="Search articles..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ backgroundColor: "white", borderRadius: "4px" }}
-        />
+        <Box
+          display="flex"
+          flexDirection={isMobile ? "column" : "row"}
+          alignItems="center"
+          gap="8px"
+          width={isMobile ? "100%" : "auto"}
+        >
+          <TextField
+            variant="outlined"
+            size="small"
+            placeholder="Search articles..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            style={{
+              backgroundColor: "white",
+              borderRadius: "4px",
+              flexGrow: 1,
+              width: isMobile ? "100%" : "auto",
+            }}
+          />
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={onSearch}
+            style={{
+              width: isMobile ? "100%" : "auto",
+            }}
+          >
+            Search
+          </Button>
+        </Box>
       </Toolbar>
     </AppBar>
   );

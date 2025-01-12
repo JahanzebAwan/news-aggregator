@@ -42,9 +42,13 @@ const FilterBar: React.FC<FilterBarProps> = ({ filters, setFilters }) => {
           id="category-label"
         >
           <MenuItem value="all">All</MenuItem>
-          <MenuItem value="technology">Technology</MenuItem>
-          <MenuItem value="sports">Sports</MenuItem>
           <MenuItem value="business">Business</MenuItem>
+          <MenuItem value="entertainment">Entertainment</MenuItem>
+          <MenuItem value="general">General</MenuItem>
+          <MenuItem value="health">Health</MenuItem>
+          <MenuItem value="science">Science</MenuItem>
+          <MenuItem value="sports">Sports</MenuItem>
+          <MenuItem value="technology">Technology</MenuItem>
         </Select>
       </FormControl>
 

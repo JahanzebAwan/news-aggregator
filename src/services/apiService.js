@@ -7,9 +7,9 @@ export const fetchArticles = async (searchQuery, filters) => {
   const { source } = filters;
 
   const fetchFromNewsApi = async () => {
-    const response = await axios.get("https://newsapi.org/v2/top-headlines", {
+    const response = await axios.get("https://newsapi.org/v2/everything", {
       params: {
-        q: "latest",
+        q: searchQuery || "latest",
         apiKey: NEWSAPI_API_KEY,
       },
     });
@@ -20,27 +20,43 @@ export const fetchArticles = async (searchQuery, filters) => {
       url: article.url,
       author: article.author || "Unknown Author",
       published_date: article.publishedAt,
-      source: "NewsApi",
+      source: article.source.name,
     }));
   };
 
   const fetchFromNewYorkTimes = async () => {
-    const response = await axios.get(
-      `https://api.nytimes.com/svc/mostpopular/v2/shared/1/facebook.json?api-key=${NY_API_KEY}`
-    );
-    return response.data.results.map((article) => ({
-      title: article.title,
-      description: article.abstract,
-      image: article.media?.[0]?.["media-metadata"]?.[2]?.url || "",
-      url: article.url,
-      author: article.byline || "Unknown Author",
-      published_date: article.published_date,
-      source: "NewYorkTimes",
-    }));
+    try {
+      const response = await axios.get(
+        "https://api.nytimes.com/svc/search/v2/articlesearch.json",
+        {
+          params: {
+            q: "latest",
+            fq: searchQuery ? searchQuery : undefined,
+            "api-key": NY_API_KEY,
+          },
+        }
+      );
+
+      return response.data.response.docs.map((article) => ({
+        title: article.headline.main,
+        description: article.abstract,
+        image: article.multimedia?.length
+          ? `https://www.nytimes.com/${article.multimedia[0].url}`
+          : "",
+        url: article.web_url,
+        author: article.byline?.original || "Unknown Author",
+        published_date: article.pub_date,
+        source: article.source,
+      }));
+    } catch (error) {
+      console.error("Error fetching from New York Times API:", error);
+      return [];
+    }
   };
 
   if (source === "NewsApi") {
-    return await fetchFromNewsApi();
+    const articles = await fetchFromNewsApi();
+    return articles.filter((article) => !article.title.includes("[Removed]"));
   } else if (source === "NewYorkTimes") {
     return await fetchFromNewYorkTimes();
   } else if (source === "all") {
