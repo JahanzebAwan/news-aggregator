@@ -9,13 +9,13 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import PersonalizedNewsFeed from "./PersonalizedNewsFeed";
 
 interface HeaderProps {
-  searchQuery: string;
   setSearchQuery: (query: string) => void;
 }
 
-const Header = ({ searchQuery, setSearchQuery }: HeaderProps) => {
+const Header = ({ setSearchQuery }: HeaderProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [query, setQuery] = React.useState("");
@@ -68,6 +68,7 @@ const Header = ({ searchQuery, setSearchQuery }: HeaderProps) => {
           >
             Search
           </Button>
+          <PersonalizedNewsFeed />
         </Box>
       </Toolbar>
     </AppBar>

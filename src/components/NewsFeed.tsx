@@ -4,6 +4,7 @@ import { fetchArticles } from "../services/apiService";
 import Filter from "./Filter";
 import { Box } from "@mui/material";
 import { useState } from "react";
+import { usePreferences } from "../hooks/usePreferences";
 
 interface NewsFeedProps {
   searchQuery: string;
@@ -15,6 +16,8 @@ const NewsFeed = ({ searchQuery }: NewsFeedProps) => {
     endDate: "",
     source: "",
   });
+
+  const { preferredAuthor, preferredSource } = usePreferences(); // Using the custom hook
 
   const {
     data: articles = [],
@@ -43,15 +46,43 @@ const NewsFeed = ({ searchQuery }: NewsFeedProps) => {
     setFilters({ startDate, endDate, source });
   };
 
-  // Filtered articles based on the selected date range and source
+  // Helper function to safely normalize and compare strings
+  const normalizeString = (str: string | null) => {
+    return str ? str.toLowerCase().trim() : "";
+  };
+
+  // Filtered articles based on the selected date range, source, and preferences
   const filteredArticles = articles.filter((article) => {
     let matches = true;
+
+    // Normalize preferred author and article author (case insensitive)
+    if (
+      preferredAuthor &&
+      normalizeString(article.author) !== normalizeString(preferredAuthor)
+    ) {
+      console.log(
+        `Excluding article by ${article.author} (doesn't match preferred author)`
+      );
+      matches = false;
+    }
+
+    // Normalize preferred source and article source (case insensitive)
+    if (
+      preferredSource &&
+      normalizeString(article.source) !== normalizeString(preferredSource)
+    ) {
+      console.log(
+        `Excluding article from ${article.source} (doesn't match preferred source)`
+      );
+      matches = false;
+    }
 
     // Date range filter
     if (filters.startDate) {
       const articleDate = new Date(article.published_date);
       const filterStartDate = new Date(filters.startDate);
       if (articleDate < filterStartDate) {
+        console.log(`Excluding article (before start date)`);
         matches = false;
       }
     }
@@ -60,12 +91,17 @@ const NewsFeed = ({ searchQuery }: NewsFeedProps) => {
       const articleDate = new Date(article.published_date);
       const filterEndDate = new Date(filters.endDate);
       if (articleDate > filterEndDate) {
+        console.log(`Excluding article (after end date)`);
         matches = false;
       }
     }
 
-    // Source filter
-    if (filters.source && article.source !== filters.source) {
+    // Source filter (from filter options)
+    if (
+      filters.source &&
+      normalizeString(article.source) !== normalizeString(filters.source)
+    ) {
+      console.log(`Excluding article (doesn't match selected source)`);
       matches = false;
     }
 
