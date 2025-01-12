@@ -3,9 +3,7 @@ import axios from "axios";
 const NEWSAPI_API_KEY = "76aae0c75ed742faafbe41dea6d756a0";
 const NY_API_KEY = "nUj1Uk4m9Q0fN69PVmYWISkZ9hA4Jidk";
 
-export const fetchArticles = async (searchQuery, filters) => {
-  const { source } = filters;
-
+export const fetchArticles = async (searchQuery) => {
   const fetchFromNewsApi = async () => {
     const response = await axios.get("https://newsapi.org/v2/everything", {
       params: {
@@ -54,22 +52,15 @@ export const fetchArticles = async (searchQuery, filters) => {
     }
   };
 
-  if (source === "NewsApi") {
-    const articles = await fetchFromNewsApi();
-    return articles.filter((article) => !article.title.includes("[Removed]"));
-  } else if (source === "NewYorkTimes") {
-    return await fetchFromNewYorkTimes();
-  } else if (source === "all") {
-    // Fetch from both APIs concurrently
-    const [newsApiArticles, nyTimesArticles] = await Promise.all([
-      fetchFromNewsApi(),
-      fetchFromNewYorkTimes(),
-    ]);
-    const filterNewsApiArticles = newsApiArticles.filter(
-      (article) => !article.title.includes("[Removed]")
-    );
-    return [...filterNewsApiArticles, ...nyTimesArticles];
-  }
+  // Fetch from both APIs concurrently
+  const [newsApiArticles, nyTimesArticles] = await Promise.all([
+    fetchFromNewsApi(),
+    fetchFromNewYorkTimes(),
+  ]);
 
-  return [];
+  const filterNewsApiArticles = newsApiArticles.filter(
+    (article) => !article.title.includes("[Removed]")
+  ); // Filter out articles with [Removed] in the title from NewsApi
+
+  return [...filterNewsApiArticles, ...nyTimesArticles];
 };

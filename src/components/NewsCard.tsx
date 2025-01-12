@@ -4,7 +4,6 @@ import {
   CardMedia,
   Typography,
   Button,
-  Grid,
   Box,
 } from "@mui/material";
 
