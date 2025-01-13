@@ -5,7 +5,7 @@ const NY_API_KEY = "nUj1Uk4m9Q0fN69PVmYWISkZ9hA4Jidk";
 const GUARDIAN_API_KEY = "44467cfb-8bf5-4c07-b1eb-823e59c80c12";
 
 // Define interfaces for the standardized article format
-interface Article {
+export interface Article {
   title: string;
   description: string;
   image: string;

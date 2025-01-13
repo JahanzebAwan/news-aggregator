@@ -26,11 +26,11 @@ const NewsFeed = ({ searchQuery }: NewsFeedProps) => {
     refetch,
     error,
   } = useQuery({
-    queryKey: ["articles", searchQuery], // Do not include filters in the query
+    queryKey: ["articles", searchQuery],
     queryFn: () => fetchArticles(searchQuery),
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
-    retry: 3, // Retry 3 times
+    retry: 3,
   });
 
   // Filter function
@@ -138,8 +138,8 @@ const NewsFeed = ({ searchQuery }: NewsFeedProps) => {
           justifyContent: "center",
         }}
       >
-        {filteredArticles.map((article) => (
-          <NewsCard key={article.id} article={article} />
+        {filteredArticles.map((article, index) => (
+          <NewsCard key={index} article={article} />
         ))}
       </Box>
     </Box>

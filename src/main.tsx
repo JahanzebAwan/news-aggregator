@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { CssBaseline, StyledEngineProvider } from "@mui/material";
+import { StyledEngineProvider } from "@mui/material";
 import App from "./App";
 
 const rootElement = document.getElementById("root");

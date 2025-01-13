@@ -6,16 +6,7 @@ import {
   Button,
   Box,
 } from "@mui/material";
-
-interface Article {
-  title: string;
-  description: string;
-  image: string;
-  url: string;
-  author: string;
-  published_date: string;
-  source: string;
-}
+import { Article } from "../services/apiService";
 
 interface NewsCardProps {
   article: Article;
