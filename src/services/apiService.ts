@@ -4,14 +4,72 @@ const NEWSAPI_API_KEY = "76aae0c75ed742faafbe41dea6d756a0";
 const NY_API_KEY = "nUj1Uk4m9Q0fN69PVmYWISkZ9hA4Jidk";
 const GUARDIAN_API_KEY = "44467cfb-8bf5-4c07-b1eb-823e59c80c12";
 
-export const fetchArticles = async (searchQuery) => {
-  const fetchFromNewsApi = async () => {
-    const response = await axios.get("https://newsapi.org/v2/everything", {
-      params: {
-        q: searchQuery || "latest",
-        apiKey: NEWSAPI_API_KEY,
-      },
-    });
+// Define interfaces for the standardized article format
+interface Article {
+  title: string;
+  description: string;
+  image: string;
+  url: string;
+  author: string;
+  published_date: string;
+  source: string;
+}
+
+// Define interfaces for the specific API responses
+interface NewsApiResponse {
+  articles: {
+    title: string;
+    description: string;
+    urlToImage: string;
+    url: string;
+    author: string | null;
+    publishedAt: string;
+    source: { name: string };
+  }[];
+}
+
+interface NYTimesResponse {
+  response: {
+    docs: {
+      headline: { main: string };
+      abstract: string;
+      multimedia: { url: string }[];
+      web_url: string;
+      byline: { original: string | null };
+      pub_date: string;
+      source: string;
+    }[];
+  };
+}
+
+interface GuardianApiResponse {
+  response: {
+    results: {
+      fields: {
+        headline: string;
+        trailText: string;
+        thumbnail: string | null;
+        byline: string | null;
+      };
+      webUrl: string;
+      webPublicationDate: string;
+    }[];
+  };
+}
+
+export const fetchArticles = async (
+  searchQuery: string
+): Promise<Article[]> => {
+  const fetchFromNewsApi = async (): Promise<Article[]> => {
+    const response = await axios.get<NewsApiResponse>(
+      "https://newsapi.org/v2/everything",
+      {
+        params: {
+          q: searchQuery || "latest",
+          apiKey: NEWSAPI_API_KEY,
+        },
+      }
+    );
     return response.data.articles.map((article) => ({
       title: article.title,
       description: article.description,
@@ -23,9 +81,9 @@ export const fetchArticles = async (searchQuery) => {
     }));
   };
 
-  const fetchFromNewYorkTimes = async () => {
+  const fetchFromNewYorkTimes = async (): Promise<Article[]> => {
     try {
-      const response = await axios.get(
+      const response = await axios.get<NYTimesResponse>(
         "https://api.nytimes.com/svc/search/v2/articlesearch.json",
         {
           params: {
@@ -35,7 +93,6 @@ export const fetchArticles = async (searchQuery) => {
           },
         }
       );
-
       return response.data.response.docs.map((article) => ({
         title: article.headline.main,
         description: article.abstract,
@@ -53,9 +110,9 @@ export const fetchArticles = async (searchQuery) => {
     }
   };
 
-  const fetchFromGuardianApi = async () => {
+  const fetchFromGuardianApi = async (): Promise<Article[]> => {
     try {
-      const response = await axios.get(
+      const response = await axios.get<GuardianApiResponse>(
         "https://content.guardianapis.com/search",
         {
           params: {
@@ -65,7 +122,6 @@ export const fetchArticles = async (searchQuery) => {
           },
         }
       );
-
       return response.data.response.results.map((article) => ({
         title: article.fields.headline,
         description: article.fields.trailText,
